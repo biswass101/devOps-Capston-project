@@ -3,9 +3,16 @@ kind: Deployment
 metadata:
   name: backend
   namespace: finch
+  labels:
+    app: backend
 spec:
   replicas: 2
   revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: backend
@@ -16,7 +23,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: docker.io/YOUR_DOCKERHUB_USERNAME/finch-backend:latest
+          image: docker.io/biwass101/bmi-health-backend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -34,6 +41,11 @@ spec:
                 secretKeyRef:
                   name: api-keys
                   key: JWT_SECRET
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-keys
+                  key: API_KEY
           resources:
             requests:
               cpu: 100m
@@ -59,7 +71,10 @@ kind: Service
 metadata:
   name: backend
   namespace: finch
+  labels:
+    app: backend
 spec:
+  type: ClusterIP
   selector:
     app: backend
   ports:

@@ -4,11 +4,14 @@ grafana:
   sidecar:
     dashboards:
       enabled: true
+    datasources:
+      enabled: true
 
 prometheus:
   prometheusSpec:
     retention: 10d
     serviceMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
 
 alertmanager:
   enabled: true

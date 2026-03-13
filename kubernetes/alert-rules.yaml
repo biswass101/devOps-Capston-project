@@ -7,6 +7,13 @@ spec:
   groups:
     - name: finch.rules
       rules:
+        - alert: BackendUnavailable
+          expr: kube_deployment_status_replicas_available{namespace="finch",deployment="backend"} < 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Backend deployment has no available replicas
         - alert: BackendHighRestartCount
           expr: increase(kube_pod_container_status_restarts_total{namespace="finch",container="backend"}[15m]) > 2
           for: 5m
@@ -21,3 +28,17 @@ spec:
             severity: critical
           annotations:
             summary: Backend CPU usage is high
+        - alert: PostgreSQLExporterDown
+          expr: up{namespace="finch",service="postgresql-exporter"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: PostgreSQL exporter is unreachable
+        - alert: RedisExporterDown
+          expr: up{namespace="finch",service="redis-exporter"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Redis exporter is unreachable

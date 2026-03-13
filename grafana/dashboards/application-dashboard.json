@@ -6,72 +6,285 @@
   "graphTooltip": 0,
   "panels": [
     {
-      "type": "timeseries",
-      "title": "Backend Pod CPU Usage",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 6,
+        "w": 6,
         "x": 0,
         "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "expr": "sum(up{namespace=\"finch\",service=\"frontend\"})",
+          "refId": "A"
+        }
+      ],
+      "title": "Frontend Targets Up",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "expr": "sum(up{namespace=\"finch\",service=\"backend\"})",
+          "refId": "A"
+        }
+      ],
+      "title": "Backend Targets Up",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
       },
       "targets": [
         {
           "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"finch\",container=\"backend\"}[5m]))",
           "refId": "A"
         }
-      ]
+      ],
+      "title": "Backend CPU Usage",
+      "type": "stat"
     },
     {
-      "type": "timeseries",
-      "title": "Backend Restarts",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
+        "h": 6,
+        "w": 6,
+        "x": 18,
         "y": 0
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
       },
       "targets": [
         {
           "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"finch\",container=\"backend\"})",
           "refId": "A"
         }
-      ]
+      ],
+      "title": "Backend Restarts",
+      "type": "stat"
     },
     {
-      "type": "timeseries",
-      "title": "PostgreSQL Pods Memory Usage",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 6
       },
+      "id": 5,
       "targets": [
         {
-          "expr": "sum(container_memory_usage_bytes{namespace=\"finch\",pod=~\"postgresql.*\"})",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"finch\",container=\"frontend\"}[5m]))",
           "refId": "A"
+        },
+        {
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"finch\",container=\"backend\"}[5m]))",
+          "refId": "B"
         }
-      ]
+      ],
+      "title": "Frontend vs Backend CPU",
+      "type": "timeseries"
     },
     {
-      "type": "logs",
-      "title": "Application Logs",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 6
       },
+      "id": 6,
+      "targets": [
+        {
+          "expr": "sum(container_memory_working_set_bytes{namespace=\"finch\",container=\"frontend\"})",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(container_memory_working_set_bytes{namespace=\"finch\",container=\"backend\"})",
+          "refId": "B"
+        }
+      ],
+      "title": "Frontend vs Backend Memory",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 7,
+      "targets": [
+        {
+          "expr": "pg_up{namespace=\"finch\"}",
+          "refId": "A"
+        },
+        {
+          "expr": "pg_stat_database_numbackends{namespace=\"finch\"}",
+          "refId": "B"
+        }
+      ],
+      "title": "PostgreSQL Health and Connections",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 8,
+      "targets": [
+        {
+          "expr": "redis_up{namespace=\"finch\"}",
+          "refId": "A"
+        },
+        {
+          "expr": "redis_connected_clients{namespace=\"finch\"}",
+          "refId": "B"
+        }
+      ],
+      "title": "Redis Health and Clients",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 9,
       "targets": [
         {
           "expr": "{namespace=\"finch\"}",
-          "refId": "A",
-          "datasource": {
-            "type": "loki",
-            "uid": "loki"
-          }
+          "refId": "A"
         }
-      ]
+      ],
+      "title": "Application Logs",
+      "type": "logs"
     }
   ],
   "schemaVersion": 39,
@@ -88,5 +301,5 @@
     "to": "now"
   },
   "title": "Finch Application Dashboard",
-  "version": 1
+  "version": 2
 }

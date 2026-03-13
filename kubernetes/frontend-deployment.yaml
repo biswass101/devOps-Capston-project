@@ -3,9 +3,16 @@ kind: Deployment
 metadata:
   name: frontend
   namespace: finch
+  labels:
+    app: frontend
 spec:
   replicas: 2
   revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: frontend
@@ -16,7 +23,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: docker.io/YOUR_DOCKERHUB_USERNAME/finch-frontend:latest
+          image: docker.io/biwass101/bmi-health-frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -45,7 +52,10 @@ kind: Service
 metadata:
   name: frontend
   namespace: finch
+  labels:
+    app: frontend
 spec:
+  type: ClusterIP
   selector:
     app: frontend
   ports:

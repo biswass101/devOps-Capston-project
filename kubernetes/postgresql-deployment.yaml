@@ -3,8 +3,12 @@ kind: Deployment
 metadata:
   name: postgresql
   namespace: finch
+  labels:
+    app: postgresql
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: postgresql
@@ -64,11 +68,15 @@ kind: Service
 metadata:
   name: postgresql
   namespace: finch
+  labels:
+    app: postgresql
 spec:
+  type: ClusterIP
   selector:
     app: postgresql
   ports:
-    - port: 5432
+    - name: postgres
+      port: 5432
       targetPort: 5432
 ---
 apiVersion: v1

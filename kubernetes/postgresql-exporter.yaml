@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql-exporter
+  namespace: finch
+  labels:
+    app: postgresql-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql-exporter
+  template:
+    metadata:
+      labels:
+        app: postgresql-exporter
+    spec:
+      containers:
+        - name: postgresql-exporter
+          image: quay.io/prometheuscommunity/postgres-exporter:v0.15.0
+          ports:
+            - containerPort: 9187
+              name: metrics
+          env:
+            - name: DATA_SOURCE_URI
+              value: postgresql:5432/bmidb?sslmode=disable
+            - name: DATA_SOURCE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: POSTGRES_USER
+            - name: DATA_SOURCE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: POSTGRES_PASSWORD
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-exporter
+  namespace: finch
+  labels:
+    app: postgresql-exporter
+spec:
+  type: ClusterIP
+  selector:
+    app: postgresql-exporter
+  ports:
+    - name: metrics
+      port: 9187
+      targetPort: metrics

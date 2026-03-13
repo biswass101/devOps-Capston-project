@@ -1,18 +1,17 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: backend-monitor
+  name: redis-monitor
   namespace: finch
   labels:
     release: kube-prometheus-stack
 spec:
   selector:
     matchLabels:
-      app: backend
+      app: redis-exporter
   namespaceSelector:
     matchNames:
       - finch
   endpoints:
-    - port: http
-      path: /health
+    - port: metrics
       interval: 30s
