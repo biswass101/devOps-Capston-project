@@ -1,6 +1,6 @@
-# DevOps Assignment Submission
+# DevOps Capstone Project
 
-This package contains a complete DevOps assignment scaffold for the repository:
+This package contains a complete DevOps capstonee project scaffold for the repository:
 
 - CI/CD workflows
 - Dockerfiles and `.dockerignore`
