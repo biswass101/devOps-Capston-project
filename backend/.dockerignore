@@ -8,3 +8,6 @@ Dockerfile
 .env.*
 coverage
 *.md
+test
+scripts
+Dockerfile-1

@@ -57,6 +57,7 @@ The workflow applies:
 
 - `backend/migrations/001_create_measurements.sql`
 - `backend/migrations/002_add_measurement_date.sql`
+- `backend/migrations/003_seed_measurements.sql`
 
 This ensures the schema used in CI matches the application code.
 
@@ -106,3 +107,4 @@ Each publish run tags images using the branch name, commit SHA, and `latest` on 
 - Docker image publishing is skipped for pull requests by design.
 - The frontend build does not require backend availability because Vite proxies API requests only in local development.
 - The backend integration tests bypass the startup database connectivity check because those tests validate HTTP behavior rather than persistence.
+- The backend CI database is seeded with demo measurements so the SQL migration chain matches local Docker behavior.

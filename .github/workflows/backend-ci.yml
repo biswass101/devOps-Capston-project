@@ -1,4 +1,4 @@
-name: Backend CI/CD Attempt - 2
+name: Backend CI/CD
 
 on:
   push:
@@ -61,6 +61,7 @@ jobs:
         run: |
           psql "$DATABASE_URL" -f migrations/001_create_measurements.sql
           psql "$DATABASE_URL" -f migrations/002_add_measurement_date.sql
+          psql "$DATABASE_URL" -f migrations/003_seed_measurements.sql
 
       - name: Lint backend
         run: npm run lint

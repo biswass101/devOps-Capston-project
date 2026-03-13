@@ -1,4 +1,4 @@
-name: Frontend CI/CD Attempt - 2
+name: Frontend CI/CD
 
 on:
   push:

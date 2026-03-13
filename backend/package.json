@@ -8,8 +8,8 @@
     "build": "docker build -t bmi-health-backend:ci .",
     "lint": "node scripts/lint.js",
     "test": "npm run test:unit && npm run test:integration",
-    "test:unit": "node --test test/unit",
-    "test:integration": "node --test test/integration"
+    "test:unit": "node --test test/unit/*.test.js",
+    "test:integration": "node --test test/integration/*.test.js"
   },
   "dependencies": {"cors":"^2.8.5","dotenv":"^16.0.0","express":"^4.18.2","pg":"^8.10.0","body-parser":"^1.20.2"},
   "devDependencies": {"nodemon":"^3.0.1","supertest":"^7.1.0"}

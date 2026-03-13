@@ -9,3 +9,5 @@ Dockerfile
 .env.*
 coverage
 *.md
+src/test
+Dockerfile-1

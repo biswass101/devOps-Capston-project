@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes');
 const db = require('./db');
+const { runMigrations } = require('./migrate');
 
 function createApp() {
   const app = express();
@@ -43,6 +44,7 @@ async function startServer() {
 
   if (process.env.SKIP_DB_CHECK !== 'true') {
     await db.verifyConnection();
+    await runMigrations();
   }
 
   const app = createApp();
