@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: finch-alerts
+  namespace: finch
+spec:
+  groups:
+    - name: finch.rules
+      rules:
+        - alert: BackendHighRestartCount
+          expr: increase(kube_pod_container_status_restarts_total{namespace="finch",container="backend"}[15m]) > 2
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Backend pod is restarting frequently
+        - alert: HighBackendCPU
+          expr: avg(rate(container_cpu_usage_seconds_total{namespace="finch",container="backend"}[5m])) > 0.8
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: Backend CPU usage is high

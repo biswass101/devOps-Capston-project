@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: postgresql-monitor
+  namespace: finch
+spec:
+  selector:
+    matchLabels:
+      app: postgresql-exporter
+  namespaceSelector:
+    matchNames:
+      - finch
+  endpoints:
+    - port: metrics
+      interval: 30s

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: finch-config
+  namespace: finch
+data:
+  NODE_ENV: "production"
+  PORT: "3000"
+  FRONTEND_URL: "https://finch.example.com"
+  REDIS_URL: "redis://redis:6379"

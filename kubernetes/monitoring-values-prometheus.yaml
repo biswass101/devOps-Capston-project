@@ -1,0 +1,14 @@
+grafana:
+  adminPassword: admin123
+  defaultDashboardsTimezone: browser
+  sidecar:
+    dashboards:
+      enabled: true
+
+prometheus:
+  prometheusSpec:
+    retention: 10d
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+alertmanager:
+  enabled: true
